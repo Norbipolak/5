@@ -1,0 +1,163 @@
+* {
+ box-sizing: border-box;   
+}
+/*
+is used to define how the width and height of an element are calculated, specifically in relation to its padding and border
+By default, when you set the width and height of an element, any padding or border you add to that element will increase its overall size. 
+
+When you use box-sizing: border-box;, the width and height properties include the padding and border 
+within the specified width and height of the element. 
+This means that padding and border will be included inside the specified width and height, 
+rather than adding to the element's overall size
+*/
+body {
+    min-height: 5000px;
+}
+/*
+Grid -> 
+    A tageknek a rácsszerkezetben való elhelyezése
+    Megmondod neki hány soros és hány oszlopos legyen tehát
+    segít sorokba és oszlopokba helyezni a HTML tartalmat 
+    Kicsit hasonlít a táblázathoz de sokkal inkább responsive
+    Sokkal jobban alkalmazható tableten vagy mobiltelefonon, hogy 
+    más kijelzőn is megfelelően jelenjen meg 
+*/
+.grid-4 {
+    display: grid; 
+    /*
+    ahhoz, hogy griddel dolgozzunk a display tulajdonságnak mindig gridnek kell lennie
+    rácsszerkezetbe fogja rendezni, de azt majd itt késöbb fogjuk meghatározni, hogy milyenbe
+    */
+    /*
+    ha a grid-4-ben csak az van meghatározva, hogy display: grid -> akkor még egymás alatt vannak
+    azok a valamik amiket a grid-item-ben csináltunk
+    */
+    /*grid-template-columns: 100px 200px 300px 400px;*/
+    /*
+    A gridünk az oszlopokba lesz rendezve ahol az első oszlop 100px a második 200px a harmadik 300px a negyedik 400px
+    ilyenkor nem veszi fel a képernyő szélességét
+    */
+    /*
+    A gridnek a reszponzívitást kell elősegítenie, tehát a különböző eszközökön megfelelően jelenjen meg,
+    ha most a böngészőben elkezdenénk jobbra balra húzni a jobb szélét, akkor nem fogja követni, csak eltünik,
+    azért mert ezeknek az oszlopoknak fix szélességet határoztunk meg, fix 1000px lesz mindig a szélesség(100,200,300,400)
+    plusz még a body-nak is van egy 8px alapvető margója mindig -> ezért szoktunk az elején padding:0; val kezdeni
+    */
+    /*grid-template-columns: 25% 25% 25% 25%;*/
+    /*
+    grid-template-columns-t meg tudjuk határozni százalékban is
+    mindegyik ugyanolyan széles lesz és a képernyő szélességének százalékában határoztuk meg a szélességet, 
+    nem pedig egy absolute értéket adtunk neki és ilyenkor, ha elkezdjük összehúzni, akkor a grid-itemek keskenyednek,
+    mert a rendelkezésre álló területet osztjuk fel
+    */
+    /*grid-template-columns:repeat(4, 25%); ugyanaz, mitha 4-szer egymás után beírnám, hogy 25%*/
+    /*
+    repeattel is meg lehet határozni, két paramétert vár 
+    1. paraméter, hogy hány részre szeretnénk felosztani a képernyőt 
+    2. 1 rész mekkora legyen
+    */
+    grid-column-gap: 15px;
+    /*
+    ha az oszlopok között szeretnék réseket
+    ezt me lehet adni abszolútértékben és százalékban is 
+    15px-t adtuk meg, de ha kiszámoljuk, hogy van mondjuk 1000px rendelkezésre álló terület és ezt elosztjuk 4 felé 
+    mert 25%-ban határoztuk meg és itt még kapunk 3*15px-t a gap-ek miatt (két szélét nem számolja kétszer, nem 30px a gap az oszlopok között)
+    tehát ez már nem 100% lesz, hanem 100% plusz 3*15px, erre megoldás ha azt írjuk, hogy auto ->
+    */
+    grid-template-columns:repeat(4, auto);
+    /*
+    automatikusan meghatározza azt a területet, ami kifér, ha 4-szer adom meg neki az auto-t, akkor azt fogja mondani, hogy 
+    a grid-gap-et beleszámítva felosztja a rendelkezésre álló területet (grid-gap-et annyiszor levonja amennyiszer szükséges)
+    de itt egyforma szélesnek kell lenniük a grid-itemeknek, mert automatikusan felosztja
+
+    ha nem auto szélességet szeretnénk, hanem arányaiban meghatározni ->
+    */
+    grid-template-columns: 2fr 1fr 1fr 1fr; /*első kétszer akkora széles lesz mint a többi, de úgy osztjuk fel, ahogy akarjuk*/
+    /*
+    fr -> fraction - itt a példában 5 egységre felosztja a képernyőt első elem 2 egység széles lesz a többi 1 és 
+    ez mindig, még ha összehúzom a képernyőt, akkor is
+    */
+}
+.grid-item {
+    padding: 15px;
+    background-color: red;
+    border: 1px solid grey;
+}
+.grid-4-row {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    /*
+    Meghatároztuk a rácsszerkezetet és ha nem fér ki, akkor a következő sorba rakja, mert csináltunk 16 grid-itemet 4*4-es rácsszerkezet lett
+    */
+    height: 600px;
+    border: 1px solid black;
+    /*a soroknak az egymáshoz képesti arányát is meg tudjuk határozni nem csak az oszlopokét
+    most automatikusan felvette a magasságot, de ennek nem feltétlenül kell, így lennie ->
+    */
+    /*grid-template-rows: 50px 100px 150px 200px;*/
+    /*
+    nem fog végigérni, nem olyan magas az elemek összesége mint a height-unk
+    ezt is meg tudjuk határozni fr-vel vagy százalékkal
+    */
+    grid-template-rows: 2fr 1fr 3fr 1fr;
+    /*
+    felosztja a rendelkzésre álló magasságot, annyi részre amenyni fr-t meghatároztunk és az fr értékei alapján elosztja azt
+    de itt fontos, hogy előtte meghatározzunk egy magasságot
+    */
+    grid-row-gap: 15px; /*a sorok közötti távolságot is be lehet állítani*/
+    /*
+    ha viszont a sorok és az oszlopok közötti távolságot is meg szeretnénk határozni ->
+    */
+    grid-gap: 15px;
+}
+
+/*
+meghatározhatjuk, hogy az elemek, hogy helyezkedjenek el egymástól a grid rendszerben
+elöször horizontálisan
+*/
+.grid-4-horizontal {
+    display: grid;
+    grid-template-columns: repeat(4, 150px);
+    grid-gap: 15px;
+    /*
+    4 grid-itemünk van egymás mellett és nem fogják ugye végigérni a sort
+    egymástól való poziciót, úgy értjük, hogy ezek legyenek középen, kicsit távolabbra, közelebbre egymástól 
+    tehát egymástól milyen távolságra legyenek, ezt me lehet határozni -> 
+    */
+    /*justify-content: start; alapbeállítás, baloldalon vannak*/
+    /*justify-content: end;  jobboldalon vannak*/
+    /*justify-content: center; akkor középen*/
+    /*de ezt még reészletesebben is be tudjuk állítani*/
+    /*justify-content: space-between;*/
+    /*
+    ilyenkor kiszámolja azt, hogy mekkora hely marad még, hogyha a grid-itemek szélességét 
+    levesszük és ezt a területet az elemek közé fogja bedobni egyenlően, tehát itt a rendelkezésre alló területetből 3 ugyanakkora 
+    rést csinál az elemek közt, mert ugye itt a példában 4 grid-itemük van
+    */
+    /*justify-content: space-evenly;*/
+    /*
+    Akkor ezt a rendelkezésre álló területet, ugy ossza fel a mi példánk esetében, hogy 5 felé 
+    megmaradnak a gap-ek az elemek között, ugye ezek kisebbek lesznek, mert a területet 5 részre osztjuk 
+    és az első elem előtt és az utolsó után is lesz egy ugyanakkora gap 
+    */
+    justify-content: space-around;
+    /*
+    Valahol a space-between és a space-evenly között, 5 részre osztja fel a területet, de nem egyenlően elemek
+    közötti gap-ek nagyobbak lesznek, mint az első elem elötti és a az utolsó elem utáni
+    */
+}
+/*
+Ha meg lehet határozni a horizontálisan, akkor meg lehet határozni a vertikálisat is
+*/
+.grid-4-vertical {
+    display: grid;
+    grid-template-columns: 1fr; /*hogy végigmenjen a teljes szélessségen*/
+    grid-template-rows: repeat(4, 150px);
+    height: 800px;
+    border: 1px solid black;
+    align-content: start; 
+    /*
+    ugyanazt csinálja, mint a justify-content, csak a soroknál is ugyanzok a beállítások is vannak hozzé
+    start, end, center, space-between, space-around, space-evenly
+    */
+}
