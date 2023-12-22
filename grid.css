@@ -1,5 +1,20 @@
+@keyframes simple-anim {
+    from {background-color:red;}
+    to {background-color:yellow;}
+}
+@keyframes advanced-anim {
+    0% {margin-left:0px; margin-top:0px}
+    25% {margin-left:250px; margin-top:0px}
+    50% {margin-left:250px; margin-top:250px}
+    75% {margin-left:0px; margin-top:250px}
+    100% {margin-left:0px; margin-top:0px}
+    
+}
 * {
  box-sizing: border-box;   
+}
+body {
+    min-height: 5000px;
 }
 /*
 is used to define how the width and height of an element are calculated, specifically in relation to its padding and border
@@ -152,7 +167,7 @@ Ha meg lehet határozni a horizontálisan, akkor meg lehet határozni a vertiká
 .grid-4-vertical {
     display: grid;
     grid-template-columns: 1fr; /*hogy végigmenjen a teljes szélessségen*/
-    grid-template-rows: repeat(4, 150px);
+    grid-template-rows: repeat(4, 150px);/*htmlben annyi elemnek kell lennie(azzal osztható) amennyit a repeatben meghatároztunk*/
     height: 800px;
     border: 1px solid black;
     align-content: start; 
@@ -161,3 +176,184 @@ Ha meg lehet határozni a horizontálisan, akkor meg lehet határozni a vertiká
     start, end, center, space-between, space-around, space-evenly
     */
 }
+.grid-4-elements {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr; 
+    grid-template-rows: 1fr 1fr 1fr 1fr; /*annyi sort meg is kell neki határozni*/
+    border: 1px solid black;
+    height: 600px;
+    /*
+    azt szeretnénk elérni, hogy az első elem, ne csak egy elemnyi helyet vegyen fel, hanem kettőt
+    erre csináljuk a grid-item-col-1-3 class-t ez alatt 
+    */
+}
+.grid-item-col-1-3 { /*szélességben 2* akkora lesz, mint a többi*/
+    grid-column-start: 1;/*azt mondjuk, hogy kezdödjön egytől*/
+    grid-column-end: 3;
+    /*
+    amelyik kapja ezt a classt az első oszlopnál kezdődik és a harmadiknál ér véget 
+    a harmadik már nem lesz benne, elsőnél kezdődik és a másodiknál végénél lesz vége ->
+    2-nek a szélességét fogja fevenni 
+    Kétszer olyan széles lesz, mint a többi és megjelenik az alján egy új legalsó sorban egy plusz elem
+    ezért ki kell törölni a html-ből egy grid-item elemet, mert az már nem szükséges és így leszünk benne 
+    teljesen a rácsban
+    */
+    grid-column: 1-3;/*ez a rövidítése a grid-column-start-end-nek, teljesen ugyanaz a végeredmény, ha így írjuk be*/
+    background-color: white; /*jobban látszódjon*/
+}
+.grid-item-row-2-4 { /*második sotról indul és a negyediknél ér véget*/
+        /*ezt meg lehet csinálni a sorokkal is*/
+        grid-row-start: 2;
+        grid-row-end: 4;
+        /*kétszer olyan magas lett, mint a többi és megint egy elemmel több lett -> ki kell mégegyett törölni*/
+        grid-row: 2/4;
+        background-color: white;
+}
+/*
+Flex
+csináltunk egy class div-et és bele egy class flex-item div-et
+*/
+.flex {
+    display: flex;
+    /*
+    ha azt akarjuk, hogy összenyomodjon, akkor van egy olyan tulajdonság, hogy flex-wrap és annak megadjuk a no-wrap-et
+    de ez az alaptulajdonság, szóval nem muszály 
+    ha viszont azt akarjuk, hogy nem menjenek össze 
+    -> 
+    flex-wrap: wrap;
+    ilyenkor a behúzásnál a képernyő jobb széle eléri a boxot és továbbhúzzuk, akkor ledobja 
+    a box-ot a következő sorba
+    beleírtuk a flex-itemek mezejébe, hogy 1, 2, 3, 4 -> lássuk, hogy melyiket dobja le 
+    jobbról elkezd beesni, tehát a negyediket fogja ledobni elöször a legjobboldalibbat
+    van olyan beállítás is, hogy wrap-reverse
+    ledobja mind az 1,2,3-at és csak a 4 marad az eredeti sorában
+    */
+    flex-wrap: wrap;
+    /*
+    ha a flex-itemeket, nem vertikális, hanem horizontális elrendezésben szeretném 
+    tehát, hogy egymás alatt legyenek alapból nem egymás mellett ->
+    flex-direction: column;
+    */
+    flex-direction: column;/*egy oszlopban helyezem az elemeket*/
+    /*
+    row -> létezik még row, ami az alapbeállítás
+    column-reverse -> fordítva helyezi el oszlopban, tehát a 4-es lesz az első
+    row-reverse -> kép jobb oldalán fog kezdődni és a legjobboldalibb lesz az 1-es, 4-es a legközelebb a bal oldalhoz
+    */
+    /*hogyan tudom az elemeket rendezni horizontálisan, hogy egymáshoz képest hol legyenek*/
+    justify-content: left;
+    /*
+    left -> alapértelmezett, ami a baloldalra helyezi 
+    center -> középen van 
+    right -> amikor jobbra rakjuk
+    space-between -> amikor nagy rés van közöttük
+    space-evenly -> kisebb rés, de van az első elem előtt és az utolsó után is 
+    space-around -> hasonló mint a space-evenly
+    */
+    /*!!!! ugy tudjuk a flex-et is verikálisan és horizontálisan helyezni mint a grid-et*/
+    height: 800px;
+    border: 2px solid black;
+    align-content: center; /*horizontális helyezése az elemeknek -> azért adtuk meg a magasságot és a bordert*/
+    /*start, end, center, space-between, space-evenly, space-around*/
+
+    /*
+    align-items és az align-content között az a különbség, hogy az align-itemben nincs space-between, evenly, around
+    mert az align-items nem egymáshoz képest határozza meg az elemek elhelyezkedését, hanem csak lent-fent-közép
+    */
+}
+.flex-item {
+    width: 200px;
+    height: 200px;
+    background-color: forestgreen;
+    border: 1px solid black;
+    /*
+    négy flex-item van egymás mellett, meghatároztunk nekik fix szélességet és magasságot,
+    de beraktuk egy flexboxba 
+    a fix szélesség ellenére ha behuzzuk a képernyőt és már nincs rendelkezésre alló terület 
+    akkor megy a képernyővel, a szélessége mindegyik elemnek ugyanolyan mértékben csökken
+    hiába a fix szélesség mégis összemennek 
+    */
+    /*
+    Amely elemek benne vannak a flexboxban(display: flex) azt flexibilissé teszi a böngésző
+    */
+    color: white;
+    text-align: center;
+    font-size: 25px;
+    line-height: 200px;
+}
+/*Elemek szélessége - relative ás absolute*/
+/*csináltunk egy div-et, aminek megadtunk egy class fixed elementset és a benne lévő div-ek class-ját is
+megváltoztattuk flex-item-2-re*/
+.flex-elements {
+    display: flex;
+}
+.flex-item-2 {
+    padding: 15px;
+    background-color: darkcyan;
+    border: 2px solid grey;
+    /*
+    azt szeretnénk, hogy ezek az elemek felvegyék a képernyő teljes szélességét
+    de ugyhogy mindegyiknek egy meghatározott arányt állítunk be 
+    flex-grow-okat adunk meg az itemeknek 
+        <div class="flex-item-2" style="flex-grow: 1;">1</div>
+        <div class="flex-item-2" style="flex-grow: 2;">2</div>
+        <div class="flex-item-2" style="flex-grow: 2;">3</div>
+        <div class="flex-item-2" style="flex-grow: 1;">4</div>
+    hasonlóan müködik a flex-growth mint az grid-template-columns ,csak ezt elemenként kell beállítani
+    felosztja a képernyőt és meg lehet határozni, hogy az elemek hány mekkora vegyenek fel
+    itt összesen van 6 egységünk az első elem egy-hatod a második, harmadik két-hatod és az utolsó ugyanugy egy-hatod a rendelkezésre
+    álló terület arányában
+    */
+    /*
+    absolute -> flex-basis -> meg kell határozni, mondjuk pixelben tetszőlegesen
+    
+        <div class="flex-item-2" style="flex-basis: 1oopx;">1</div>
+        <div class="flex-item-2" style="flex-basis: 15opx;">2</div>
+        <div class="flex-item-2" style="flex-basis: 15opx;">3</div>
+        <div class="flex-item-2" style="flex-basis: 1oopx;">4</div>
+    */
+}
+/*
+Elemeknek a sorrendjének a beállítása, de csak ugy müködik, hogy mindegyiknek beállítjuk
+        <div class="flex-item-2" style="order:4;">1</div>
+        <div class="flex-item-2" style="order:2;">2</div>
+        <div class="flex-item-2" style="order:3;">3</div>
+        <div class="flex-item-2" style="order:1;">4</div>
+
+    Egyes elemnek beállítottuk azt az ordert, hogy 4, tehát bemegy a végére, kettesnek beállítottuk a 3-t
+    tehát bemegy a 3-dik helyre, hármasnak a 2-t az lesz a második és a negyedik elem lesz az első helyen
+
+    pl. ha JavaScriptben akarunk írni egy memória-kártya játékot, ugy kerverjük meg a paklit, hogy véletlenszerűen kiosztjuk, hogy 
+    melyik hányadik sorban legyen
+*/
+/*********************************************************************************************************************************/
+/*
+Animációk
+<div class="simple-anim-square"></div>
+*/
+.simple-anim-square {
+    width: 250px;
+    height: 250px;
+    border: 1px solid grey;
+    animation-name: simple-anim; /*megadjuk az animációnk nevét amit létrehoztunk legfelül a keyframes nevét*/
+    animation-duration: 2s; /*két másodperc alatt lejátsza az animációt, amikor vége egyik szín sem lesz*/
+}
+/*
+fontos!
+legfelül -> keyframes, így lehet létrehozni animációt
+@keyframes és egy nevet meghatározni neki 
+from{} -> itt meghatározzuk neki azokat a tulajdonságokat, ahonnan indulunk
+to{} -> meghatározzuk azokat a tulajdonságokat, ahova megérkezünk
+*/
+.advanced-anim-square {
+    width: 250px;
+    height: 250px;
+    border: 1px solid grey;
+    animation-name: advanced-anim;
+    animation-duration: 5s;
+    animation-delay: 2s;/*2s vár amig ezt az animációt elkezdené*/
+    animation-iteration-count: infinite;/*5-ször megy végbe a folyamat, infnite -> addeig megy még be nem zárom a böngészőt*/
+}
+/*
+Ezzel azt csináltuk, hogy elmegyünk jobbra, aztán lefele, aztán balra, aztán felfele
+*/
